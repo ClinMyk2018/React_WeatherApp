@@ -7,7 +7,6 @@ const DayCard = ({ reading, degreeType }) => {
   newDate.setTime(weekday)
 
 
-
   const imgURL = `owf owf-${reading.weather[0].id} owf-5x`
 
   return (

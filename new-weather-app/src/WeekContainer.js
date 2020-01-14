@@ -3,13 +3,10 @@ import DayCard from "./dayCard";
 import apiConfig from "./apiKeys";
 import DegreeToggle from "./DegreeToggle";
 import SearchBar from "./SearchBar";
+import Map from "./Map";
+import { Layer, Feature } from "react-mapbox-gl";
 
 class WeekContainer extends React.Component {
-  // TODO:
-  // DegreeToggle will be a Child Component of WeekContainer, so you’ll need to import DegreeToggle
-  // into WeekContainer, create a function, and then pass that function down as a prop to DegreeToggle
-  // in the render method. Render DegreeToggle above where the DayCards will be rendered.
-
   state = {
     name: "",
     fullData: [],
@@ -29,29 +26,22 @@ class WeekContainer extends React.Component {
   }
 
   updateSearchTerm = event => {
-    this.setState(
-        {
-         term: event.target.value
-        }
-        );
-
-  }
+    this.setState({
+      term: event.target.value
+    });
+  };
 
   updateForecastDegree = event => {
-    this.setState(
-      {
-        degreeType: event.target.value
-      }
-    );
+    this.setState({
+      degreeType: event.target.value
+    });
   };
 
   onFormSubmit = event => {
     event.preventDefault();
 
     this.fetchWeather();
-  }
-
-
+  };
 
   fetchWeather() {
     const weatherURL =
@@ -90,14 +80,27 @@ class WeekContainer extends React.Component {
     return (
       <div className="container">
         <h1 className="display-1 jumbotron mt-2">5-Day Forecast</h1>
-        {/* search bar needed to change cities */}
-        {/* change the city by result */}
+        <Map
+          style="mapbox://styles/mapbox/streets-v9"
+          containerStyle={{
+            height: "50vh",
+            width: "auto"
+          }}
+        >
+          <Layer
+            type="symbol"
+            id="marker"
+            layout={{ "icon-image": "marker-15" }}
+          >
+            <Feature coordinates={[-0.481747846041145, 51.3233379650232]} />
+          </Layer>
+        </Map>
         <SearchBar
-        updateSearchTerm={this.updateSearchTerm} 
-        term = {this.term}
-        onFormSubmit = {this.onFormSubmit}
+          updateSearchTerm={this.updateSearchTerm}
+          term={this.term}
+          onFormSubmit={this.onFormSubmit}
         />
-  <h2 className="display-5 text-muted mb-2">{this.state.name}</h2>.
+        <h2 className="display-5 text-muted mb-2">{this.state.name}</h2>
         <DegreeToggle
           updateForecastDegree={this.updateForecastDegree}
           degreeType={this.degreeType}
